@@ -106,4 +106,5 @@ def block_cloudflare(blocklist):
 
 def block_iptables(blocklist):
     # TODO
-    pass
+    blocked = {}
+    return blocked
