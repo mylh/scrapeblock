@@ -1,0 +1,57 @@
+---
+
+# logging options
+log:
+  level: info  # one of debug, info, notice, warning, error, critical
+  screen: True  # duplicate logging on screen
+  path: ~/.scrapeblock/scrapeblock.log
+  rotate: 3 # number of backup copies
+
+
+# analyze command settings
+analyze:
+  # number of requests per 24 hours when IP is treated as scraper
+  threshold: 100
+  logfile: /var/log/nginx/access.log
+  # regular expressions for log format
+  logformat:
+    host: '^(\d+\.\d+\.\d+\.\d+)+'
+    time: '\[(.*?)\]'
+
+  # analyze results
+  analyze_file: ~/.scrapeblock/analyze.csv
+
+
+block:
+  # this file is checked before block an IP
+  blocked_file: ~/.scrapeblock/blocked.csv
+
+  # ip addresses or hostnames to skip
+  whitelist:
+    - .googlebot.com
+    - .search.msn.com
+    - .yandex.com
+    - .google.com
+    - .yse.yahoo.net
+    - .google.com
+
+  # ip addresses or hostnames to always block
+  blacklist:
+    - amazonaws.com
+    - your-server.de
+
+  threshold: 1000
+
+
+cloudflare:
+  enabled: True
+  api_key:
+  auth_email:
+  zone_name:
+  mode: block # block, challenge, whitelist
+
+
+iptables:
+  enabled: True
+  rule_template: '-t INPUT -A INPUT -s %s -j DROP'
+  path: '/sbin/iptables'
