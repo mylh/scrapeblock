@@ -28,11 +28,11 @@ def setup_logging(log_level):
 
 
 @click.group()
-@click.option('--config', type=click.Path(exists=True),
-              help='Path to config file', )
+@click.option('--config', type=click.Path(),
+              help='Path to config file', default='~/.scrapeblock/config.yml')
 @click.option('--debug', default=False, is_flag=True,
               help='Override log level from config file')
-def cli(config='~/.scrapeblock/config.yml', debug=False):
+def cli(config, debug=False):
     global log
     if config is not None:
         setattr(settings, 'load_path', config)
