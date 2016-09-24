@@ -60,7 +60,6 @@ def analyze(logfile=None, start=None):
         analyze_log(inp, start)
 
 
-
 def write_blocked_results(blocked):
     with open(os.path.expanduser(
             settings.get('block.blocked_file')), 'w') as out:
@@ -70,10 +69,13 @@ def write_blocked_results(blocked):
 
 def read_previously_blocked():
     blocked = []
-    with open(os.path.expanduser(
-              settings.get('block.blocked_file')), 'rt') as inp:
-        for line in inp:
-            blocked.append(line.strip())
+    try:
+        with open(os.path.expanduser(
+                 settings.get('block.blocked_file')), 'rt') as inp:
+            for line in inp:
+                blocked.append(line.strip())
+    except IOError:
+        pass
     return set(blocked)
 
 
@@ -100,6 +102,8 @@ def block():
     blocked = read_previously_blocked()
 
     to_block = {}
+    cl_blocked = {}
+    ipt_blocked = {}
     for ip in blocklist:
         if ip not in blocked:
             to_block[ip] = blocklist[ip]
