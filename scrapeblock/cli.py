@@ -117,7 +117,7 @@ def block():
         ipt_blocked = block_iptables(to_block)
 
     # set operations
-    blocked = blocked | (set(cl_blocked.keys()) & set(ipt_blocked.keys()))
+    blocked = blocked | (set(cl_blocked.keys()) | set(ipt_blocked.keys()))
     write_blocked_results(blocked)
 
 
