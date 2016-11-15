@@ -87,7 +87,7 @@ def block_cloudflare(blocklist):
         }
 
     blocked = {}
-    for ip, dat in blocklist:
+    for ip, dat in blocklist.items():
         params['configuration'] = {
             'target': 'ip',
             'value': ip,
