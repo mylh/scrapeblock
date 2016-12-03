@@ -51,13 +51,22 @@ def cli(config, debug=False):
 def analyze(logfile=None, start=None):
     """Analyze logfile for scrapers"""
     if logfile is None:
-        logfile = settings.get('analyze.logfile')
+        logfiles = settings.get('analyze.logfile', [])
+        if isinstance(logfiles, str):
+            logfiles = [logfiles]
+    else:
+        logfiles = [logfile]
     if start is None:
         start = dt.datetime.now() - dt.timedelta(days=1)
     else:
         start = dateutil.parser.parse(start, fuzzy=True, ignoretz=True)
-    with open(logfile, 'rt') as inp:
-        analyze_log(inp, start)
+    for logfile in logfiles:
+        log.info('Processing log: %s' % logfile)
+        try:
+            with open(logfile, 'rt') as inp:
+                analyze_log(inp, start)
+        except IOError as e:
+            log.error('Error processing file: %s - %s' % (logfile, str(e)))
 
 
 def write_blocked_results(blocked):
