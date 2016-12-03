@@ -44,6 +44,9 @@ block:
 
   threshold: 1000
 
+cleanup:
+  days: 30 # delete rule after number of days
+
 
 cloudflare:
   enabled: True

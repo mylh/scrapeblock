@@ -8,7 +8,8 @@ import dateutil
 
 from .conf import settings
 from .analyze import analyze_log
-from .block import process, block_cloudflare, block_iptables
+from .block import (
+    process, block_cloudflare, block_iptables, cleanup_cloudflare)
 
 log = None
 
@@ -128,6 +129,17 @@ def block():
     # set operations
     blocked = blocked | (set(cl_blocked.keys()) | set(ipt_blocked.keys()))
     write_blocked_results(blocked)
+
+
+
+@cli.command()
+@click.option('--days', type=int)
+def cleanup(days=None):
+    """Clean up old rules on CF and IPtables"""
+    if days is None:
+        days = settings.get("cleanup.days", 30)
+
+    cleanup_cloudflare(days)
 
 
 if __name__ == '__main__':
